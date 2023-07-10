@@ -1,9 +1,7 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
-import App, { ORDER_ID } from "./App";
+import { render } from "@testing-library/react";
+import App from "./App";
 
-test("renders display Order with the correct order id", () => {
+test("renders application", () => {
   render(<App />);
-  const orderElement = screen.getByText(`Order: ${ORDER_ID}`);
-  expect(orderElement).toBeInTheDocument();
 });

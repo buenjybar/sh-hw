@@ -1,3 +1,5 @@
+import { Order } from "../models/all";
+
 const API_URL = "https://api.shipup.co";
 
 //todo : change this to use authentication
@@ -7,11 +9,26 @@ export function getAuthToken() {
 }
 
 export async function getOrderById(id: string) {
-  return await fetch(`${API_URL}/v2/orders`, {
-    method: "GET",
-    headers: {
-      "Content-type": "application/json",
-      Authorization: getAuthToken(),
-    },
-  });
+  const req = await fetch(
+    `${API_URL}/v2/orders?expand[]=fulfillments.trackers`,
+    {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+        Authorization: getAuthToken(),
+      },
+    }
+  );
+
+  const data = await req.json();
+  const parsed: Order[] = data.data.map((o: any) => ({
+    firstName: o.first_name,
+    lastName: o.last_name,
+    trackers:
+      o.fulfillments?.data.map((t: any) => ({
+        id: t.id,
+        status: t.status_code,
+      })) ?? [],
+  }));
+  return parsed;
 }

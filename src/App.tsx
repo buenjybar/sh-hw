@@ -1,36 +1,37 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "./App.css";
-import { getOrderById } from "./utils/requests";
+import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
+import OrderInfo from "./routes/OrderInfo";
 
 export const ORDER_ID = "UK1876YH08_2";
 
-function App() {
-  const [order, setOrder] = useState(null);
-
-  const fetchOrderById = (id: string) => {
-    return getOrderById(id)
-      .then((res) => res.json())
-      .then((data) => setOrder(data));
-  };
-
-  useEffect(() => {
-    fetchOrderById(ORDER_ID);
-  }, []);
-
+function Home() {
   return (
-    <div>
-      <header>
-        <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-slate-900 md:text-5xl lg:text-6xl dark:text-white">
-          Order: {ORDER_ID}
-        </h1>
+    <h1 className="m-4 text-4xl font-extrabold">Please open the order tab</h1>
+  );
+}
 
-        {order != null ? (
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            {JSON.stringify(order)}
-          </p>
-        ) : null}
-      </header>
-    </div>
+function App() {
+  return (
+    <Router>
+      <nav className="w-full bg-white border-gray-200 dark:bg-gray-900">
+        <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto">
+          <ul className="w-full font-medium flex p-4 border justify-end border-gray-100 rounded-lg bg-gray-50 dark:border-gray-700">
+            <li className="mr-4">
+              <Link to="/"> Home</Link>
+            </li>
+            <li>
+              <Link to={`/orders/${ORDER_ID}`}>Orders</Link>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <Routes>
+        <Route path="/" Component={Home} />
+        <Route path="/orders/:id" Component={OrderInfo} />
+      </Routes>
+    </Router>
   );
 }
 
