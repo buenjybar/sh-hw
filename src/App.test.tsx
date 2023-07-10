@@ -1,9 +1,9 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import App from "./App";
+import App, { ORDER_ID } from "./App";
 
-test("renders display Hello Word", () => {
+test("renders display Order with the correct order id", () => {
   render(<App />);
-  const helloElement = screen.getByText(/Hello Word/i);
-  expect(helloElement).toBeInTheDocument();
+  const orderElement = screen.getByText(`Order: ${ORDER_ID}`);
+  expect(orderElement).toBeInTheDocument();
 });
